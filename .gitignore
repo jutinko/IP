@@ -1,1 +1,5 @@
 bin/
+build/
+lib/
+*.pyc
+.DS_Store
