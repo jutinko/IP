@@ -9,8 +9,8 @@
 #include <vector>
 
 #define DEFAULT_SIZE 50
-#define DEFAULT_RANGE_LOWER_BOUND 0.0
-#define DEFAULT_RANGE_UPPER_BOUND 1000.0
+#define DEFAULT_RANGE_LOWER_BOUND 0
+#define DEFAULT_RANGE_UPPER_BOUND 1000
 
 using namespace std;
 
@@ -40,7 +40,7 @@ namespace IP
       Grid(int, int, int); 
       Grid(int, int, int, double, double); 
       void insert(FLAT::Vertex&);
-      vector<vector<int>> findNeighbourWithRadius(vector<int>&, int);
+      vector<vector<int>> findNeighbourWithRadius(vector<int>, int);
       void kNNQuery(FLAT::SpatialQuery&, vector<FLAT::Vertex>&);
       //void kNNQuery(FLAT::Vertex&, vector<FLAT::Vertex>&);
       bool find(FLAT::Vertex&);
@@ -50,16 +50,16 @@ namespace IP
       vector<int> getCellCoordinates(FLAT::Vertex&);
       unordered_set<FLAT::Vertex, VertexHash, VertexEqual>* getCell(FLAT::Vertex& v);
       FLAT::spaceUnit distancePointToAxisAlignedCube(FLAT::Vertex, vector<int>);
+      double cellUnit;
+      double range_lower, range_upper;
     private:
       int x, y, z;
       // This assumes that the cells are cubic
-      double cellUnit;
-      double range_lower, range_upper;
+      
       unordered_set<FLAT::Vertex, VertexHash, VertexEqual>**** grid;
-      bool isValidCell(bool, vector<int>&, vector<int>&, int);
+      bool isValidCell(bool, vector<int>, vector<int>, int);
       vector<FLAT::Vertex> getVerticesOfCell(vector<int>);
       double findMinDintanceToNeighbourCells(FLAT::Vertex&, vector<vector<int>>&);
-      void filterNeighbourList(FLAT::Vertex, vector<vector<int>>&, double);
   };
 }
 
