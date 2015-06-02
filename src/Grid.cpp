@@ -192,10 +192,7 @@ namespace IP
     for(int i = 0; i < 3; ++i)
     {
       normalisedV[i] -= cellCoordinates[i]*cellUnit;
-      if(normalisedV[i] < 0)
-      {
-        normalisedV[i] = abs(normalisedV[i])+cellUnit;
-      }
+      normalisedV[i] = normalisedV[i] < 0 ? -normalisedV[i]+cellUnit : normalisedV[i];
       //printf("v becomes: %f %f %f cellcoodri: %d %d %d\n", normalisedV[0], normalisedV[1], normalisedV[2], cellCoordinates[0], cellCoordinates[1], cellCoordinates[2]);
       // TODO: SET EPSILON CONSTANT
       if(normalisedV[i]+0.0000001 > cellUnit)
