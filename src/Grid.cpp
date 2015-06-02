@@ -2,6 +2,7 @@
 #include <cstdio>
 #include "DataFileReader.hpp"
 #include <cfloat>
+#include <algorithm>
 
 namespace IP
 {
@@ -240,7 +241,7 @@ namespace IP
       this->v = v;
     }
 
-    bool operator() (FLAT::Vertex& v1, FLAT::Vertex& v2)
+    bool operator() (FLAT::Vertex v1, FLAT::Vertex v2)
     {
       return FLAT::Vertex::distance(v, v1) < FLAT::Vertex::distance(v, v2);
     }
@@ -255,7 +256,7 @@ namespace IP
   // Resizes the vector too
   double findMaxDistance(int k, FLAT::Vertex p, vector<FLAT::Vertex>& tempResult)
   {
-    //double result = DBL_MIN;
+    double result = DBL_MAX;
     //auto it = tempResult.begin();
     //while(it != tempResult.end())
     //{
@@ -264,9 +265,12 @@ namespace IP
     //  ++it;
     //}
     sortAccordingToDinstance(p, tempResult);
-    int index = tempResult.size() > (size_t)k ? k-1 : tempResult.size()-1;
-    tempResult.resize(index+1);
-    return FLAT::Vertex::distance(tempResult[index], p);
+    if(tempResult.size() < (size_t)k)
+      return result;
+    return FLAT::Vertex::distance(tempResult[k-1], p);
+    //int index = tempResult.size() > (size_t)k ? k-1 : tempResult.size()-1;
+    //tempResult.resize(index+1);
+    //return FLAT::Vertex::distance(tempResult[index], p);
   }
  
   void Grid::filterNeighbourList(FLAT::Vertex v, vector<vector<int>>& neighbours, double d)
@@ -302,7 +306,7 @@ namespace IP
     //printf("Size before: %lu\n", neighbours.size());
     double maxDistance = findMaxDistance(k, p, tempResult);
     filterNeighbourList(p, neighbours, maxDistance);
-    //printf("Size after: %lu\n", neighbours.size());
+    //printf("Size after: %lu tempResult size: %lu\n", neighbours.size(), tempResult.size());
 
     while(tempResult.size() < (size_t)k || 
         neighbours.size() > 0)
@@ -317,6 +321,8 @@ namespace IP
       ++radius;
       maxDistance = findMaxDistance(k, p, tempResult);
       neighbours = findNeighbourWithRadius(coordinates, radius);
+      if(neighbours.size() == 0)
+        break;
     //printf("Size before: %lu\n", neighbours.size());
       filterNeighbourList(p, neighbours, maxDistance);
     //printf("Size after: %lu\n", neighbours.size());
