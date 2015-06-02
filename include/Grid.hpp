@@ -7,6 +7,7 @@
 #include "SpatialQuery.hpp"
 #include "Vertex.hpp"
 #include <vector>
+#include <algorithm>
 
 #define DEFAULT_SIZE 50
 #define DEFAULT_RANGE_LOWER_BOUND 0.0
