@@ -46,9 +46,9 @@ void findTestPositive()
   assert(myGrid->find(v) == true);
 }
 
-IP::Grid* testLoadFromFile(string datafile)
+IP::Grid* testLoadFromFile(string datafile, int dim)
 {
-  IP::Grid* myGrid = new IP::Grid(10, 10, 10, 0, 1000);
+  IP::Grid* myGrid = new IP::Grid(dim, dim, dim, 0, 1000);
   FLAT::DataFileReader* input = new FLAT::DataFileReader(datafile);
   FLAT::SpatialObject* object;
   FLAT::Vertex vertex;
@@ -152,7 +152,7 @@ void testPointDistance()
   assert(dist-200 < 0.0001);
 }
 
-void query(IP::Grid* myGrid, string queryfile)
+void query(IP::Grid* myGrid, string queryfile, bool print)
 {
   FLAT::Timer querying;
   querying.start();
@@ -164,38 +164,48 @@ void query(IP::Grid* myGrid, string queryfile)
   {
     vector<FLAT::Vertex> result;
     myGrid->kNNQuery(*query, result);
-  //  for(vector<FLAT::Vertex>::iterator it = result.begin(); it != result.end(); ++it)
-  //  {
-  //    printf("%f ", (*it).getCenter()[0]);
-  //  }
-  //  printf("\n");
+    if(print)
+    {
+      for(vector<FLAT::Vertex>::iterator it = result.begin(); it != result.end(); ++it)
+      {
+        printf("%f ", (*it).getCenter()[0]);
+      }
+      printf("\n");
+    }  
   }
-  cout << querying << endl;
+  if(!print)
+  {
+    cout << querying;
+  }
 }
 
 int main(int argc, const char* argv[])
 {
   string queryfile;
   string datafile;
+  int dim;
+  bool print;
 
   po::options_description desc("Options");
   desc.add_options()
     ("help", "produce help message")
     ("datafile", po::value<string>(&datafile), "name fordatafile")
-    ("queryfile", po::value<string>(&queryfile), "file containing the queries");
+    ("queryfile", po::value<string>(&queryfile), "file containing the queries")
+    ("dim", po::value<int>(&dim), "grid dimension")
+    ("print", po::value<bool>(&print), "if print result");
 
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
   po::notify(vm);
 
-  IP::Grid* myGrid = testLoadFromFile(datafile);
+  IP::Grid* myGrid = testLoadFromFile(datafile, dim);
+  //query(myGrid, queryfile, print);
   vector<FLAT::Vertex> result;
-  FLAT::Vertex p(312.684000, 95.985200, 291.729000);
+  FLAT::Vertex p(699.454000, 702.769000, 102.094000);
   FLAT::SpatialQuery q;
   q.k = 3;
   q.Point = p;
   myGrid->kNNQuery(q, result);
-  query(myGrid, queryfile);
   //findNeighbourWithRadiusTest();
   //printf("Insert one test\n");
   //insertOneTest();
