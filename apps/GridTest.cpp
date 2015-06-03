@@ -92,7 +92,7 @@ void putSetIntoVectorTest()
 
 void notEnoughPointKNNTest()
 {
-  IP::Grid* myGrid = new IP::Grid(10, 10, 10, 0, 1000);
+  IP::Grid* myGrid = new IP::Grid(500, 500, 500, 0, 1000);
   FLAT::Vertex v(1, 2, 3);
   myGrid->insert(v);
   v[0] = 0.5;
