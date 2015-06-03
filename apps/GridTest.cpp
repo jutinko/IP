@@ -48,7 +48,7 @@ void findTestPositive()
 
 IP::Grid* testLoadFromFile(string datafile)
 {
-  IP::Grid* myGrid = new IP::Grid(10, 10, 10, 0, 1000);
+  IP::Grid* myGrid = new IP::Grid(50, 50, 50, 0, 1000);
   FLAT::DataFileReader* input = new FLAT::DataFileReader(datafile);
   FLAT::SpatialObject* object;
   FLAT::Vertex vertex;
@@ -92,7 +92,7 @@ void putSetIntoVectorTest()
 
 void notEnoughPointKNNTest()
 {
-  IP::Grid* myGrid = new IP::Grid(10, 10, 10, 0, 1000);
+  IP::Grid* myGrid = new IP::Grid(500, 500, 500, 0, 1000);
   FLAT::Vertex v(1, 2, 3);
   myGrid->insert(v);
   v[0] = 0.5;
@@ -164,11 +164,11 @@ void query(IP::Grid* myGrid, string queryfile)
   {
     vector<FLAT::Vertex> result;
     myGrid->kNNQuery(*query, result);
-  //  for(vector<FLAT::Vertex>::iterator it = result.begin(); it != result.end(); ++it)
-  //  {
-  //    printf("%f ", (*it).getCenter()[0]);
-  //  }
-  //  printf("\n");
+    for(vector<FLAT::Vertex>::iterator it = result.begin(); it != result.end(); ++it)
+    {
+      printf("%f ", (*it).getCenter()[0]);
+    }
+    printf("\n");
   }
   cout << querying << endl;
 }
